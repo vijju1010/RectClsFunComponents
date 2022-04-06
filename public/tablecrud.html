@@ -1,0 +1,325 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        .styles {
+            padding: 5px;
+            margin: 3px;
+            border: 2px solid green;
+        }
+
+        span {
+            color: red;
+        }
+
+        input:required {
+            box-shadow: 4px 4px 20px rgba(237, 232, 232, 0.85);
+        }
+
+
+        input:required:focus {
+            border: 1px solid red;
+            outline: none;
+        }
+
+
+        input:required:hover {
+            opacity: 12;
+        }
+    </style>
+</head>
+
+<body>
+    <table border="3px">
+        <thead>
+            <th onclick="sortBy('firstname')">firstname</th>
+            <th onclick="sortBy('lastname')">lastname</th>
+            <th onclick="sortBy('age')">age</th>
+            <th onclick="sortBy('gender')">gender</th>
+        </thead>
+        <tbody id="disptable">
+        </tbody>
+    </table>
+    <input type="radio" name="gen" value="all" onclick="filter(event)" checked="true">All
+    <input type="radio" name="gen" value="male" onclick="filter(event)">Male
+    <input type="radio" name="gen" value="female" onclick="filter(event)">Female
+    <br>
+    <span id="pcount"></span>
+    <h4>
+        Data to add new employee record in a table
+    </h4>
+    <!-- <form name="empform" onsubmit="addEmployee(event)"> -->
+    <form name="empform">
+
+        <input type="text" name="firstname" placeholder="Enter employee firstname" id="firstname" required
+            onfocusout="handlefname(event)">
+        <span id="fname"></span>
+        <br>
+        <input type="text" name="lastname" placeholder="Enter employee lastname" id="lastname" required
+            onfocusout="handlename(event)">
+        <span id="lname"></span>
+        <br>
+        <input type="number" inputmode="numeric" name="age" placeholder="Enter employee age" required
+            onfocusout="handleage(event)">
+        <span id="age"></span>
+        <br>
+        <!-- <input type="text" name="gender" placeholder="Enter Gender" required> -->
+        <input type="radio" name="gender" value="male">Male
+
+        <input type="radio" name="gender" value="female">Female
+        <span id="gender"></span>
+        <br>
+        <input type="hidden" value="" id="hid" name="hid">
+        <button onclick="addEmployee(event)" type="button">Add employee</button>
+        <!-- <button>ADD employee</button> -->
+    </form>
+    <button onclick="updatee()" type="button" style="display: none;" id="upb">update employee</button>
+    <p id="ptag"></p>
+    <script type="text/babel">
+        var Y = () => {
+            return <span>hello</span>
+        }
+        ReactDOM.render(<Y/>, document.getElementById('ptag'))
+
+        function filter(e) {
+            console.log(e.target.value)
+            if (e.target.value == "all") {
+                // $('#pcount').html("")
+                ReactDOM.render(<span></span>, document.getElementById('pcount'))
+                genTable(employees);
+            }
+            else {
+                var ftable = employees.filter(emp => emp.gender == e.target.value)
+                // $('#pcount').html("" + e.target.value + " Count : " + ftable.length)
+                ReactDOM.render(<span>Count : {ftable.length}</span>, document.getElementById('pcount'))
+                genTable(ftable)
+            }
+        }
+
+
+        function handlefname(event) {
+            console.log(event)
+            var fname = event.target.value;
+            if (fname.length < 3) {
+                // $('#fname').html("<span>firstname should be greater than 3</span>")
+                ReactDOM.render(<span>firstname should be greater than 3</span>, document.getElementById('fname'))
+
+            }
+            else {
+                // $('#fname').html("")
+                ReactDOM.render(<span></span>, document.getElementById('fname'))
+
+            }
+        }
+        function handlename(event) {
+            var lname = event.target.value;
+            if (lname.length < 3) {
+                $('#lname').html("<span>lastname should be greater than 3</span>")
+            }
+            else {
+                $('#lname').html("")
+            }
+        }
+        function handleage(event) {
+            var age = event.target.value;
+            if (age < 18 || age > 60) {
+                $('#age').html("<span>age should be between 18 and 60</span>")
+            }
+            else {
+                $('#age').html("")
+            }
+        }
+
+        var employees = [
+            {
+                id: 1,
+                firstname: 'Srija',
+                lastname: 'Yamini',
+                age: "21.3",
+                gender: "female"
+            },
+            {
+                id: 2,
+                firstname: 'Padma',
+                lastname: 'Rayudu',
+                age: "21.5",
+                gender: "female"
+            },
+            {
+                id: 3,
+                firstname: 'vijay',
+                lastname: 'vijju',
+                age: "21",
+                gender: "male"
+            }
+
+        ]
+
+        //generate table before sorting
+        genTable(employees);
+        function sortBy(key) {
+            employees.sort((a, b) => {
+                if (a[key] > b[key])
+                    return 1
+                else
+                    return -1
+            })
+            genTable(employees);
+        }
+        function addEmployee(e) {
+            e.preventDefault();
+
+
+            var newEmployee = {};
+            var ch = false;
+            if (document.empform.firstname.value == '') {
+                // document.getElementById('fname').innerHTML=""
+                // $('#fname').text('firstname is required');
+                ReactDOM.render(<span>Firstname is required</span>, document.getElementById('fname'))
+                employees.forEach((item, index) => {
+                    if (item.firstname == document.empform.firstname.value) {
+                        $('#fname').text('firstname already exists');
+                        ReactDOM.render('', document.getElementById('fname'))
+
+                        return
+                    }
+                })
+                ch = true;
+            }
+            else {
+                // $('#fname').text('');
+                ReactDOM.render(<span></span>, document.getElementById('fname'))
+
+            }
+            if (document.empform.lastname.value == '') {
+                $('#lname').text('lastname is required');
+                employees.forEach((item, index) => {
+                    if (item.lastname == document.empform.lastname.value) {
+                        $('.lname').text('lastname already exists');
+                        return
+                    }
+                })
+                ch = true;
+            }
+            else {
+                $('#lname').text('');
+            }
+            if (document.empform.age.value == '') {
+                $('#age').text('age is required');
+                ch = true;
+            }
+            else {
+                $('#age').text('');
+            }
+            if (document.empform.gender.value == '') {
+                $('#gender').text('gender is required');
+                ch = true;
+            }
+            else {
+                $('gender').text('')
+            }
+            if (ch == false) {
+                newEmployee.firstname = document.empform.firstname.value.charAt(0).toUpperCase() + document.empform.firstname.value.slice(1);
+                newEmployee.lastname = document.empform.lastname.value;
+                newEmployee.age = document.empform.age.value;
+                newEmployee.gender = document.empform.gender.value;
+                newEmployee.id = employees.length + 1
+                console.log(newEmployee);
+                // employees.push(newEmployee);
+                employees = [...employees, newEmployee]
+                console.log(employees)
+                genTable(employees);
+            }
+        }
+
+        function deleteEmp(id) {
+            employees.forEach((emp, index) => {
+                if (emp.id == id) { employees.splice(index, 1) }
+            })
+            genTable(employees)
+        }
+
+        function updateEmp(index) {
+            //e.preventDefault();
+
+            employees.forEach((emp, i) => {
+                if (emp.id == index) {
+                    document.empform.firstname.value = employees[i].firstname;
+                    document.empform.lastname.value = employees[i].lastname;
+                    document.empform.age.value = employees[i].age;
+                    document.empform.gender.value = employees[i].gender;
+                    document.empform.hid.value = employees[i].id;
+                    return;
+                }
+            })
+            $('#upb').css("display", "block");
+
+
+        }
+        function updatee() {
+            // var newEmployee = {};
+            var index = document.empform.hid.value
+            console.log(index, "index")
+
+            var ch = false;
+            if (document.empform.firstname.value == '') {
+                $('#fname').text('firstname is required');
+                ch = true;
+            }
+            if (document.empform.lastname.value == '') {
+                $('#lname').text('lastname is required');
+                ch = true;
+            }
+            if (document.empform.age.value == '') {
+                $('#age').text('age is required');
+                ch = true;
+            }
+            if (document.empform.gender.value == '') {
+                $('#gender').text('gender is required');
+                ch = true;
+            }
+            if (ch == false) {
+                employees.forEach((emp, i) => {
+                    if (emp.id == index) {
+                        employees[i].firstname = document.empform.firstname.value;
+                        employees[i].lastname = document.empform.lastname.value;
+                        employees[i].age = document.empform.age.value;
+                        employees[i].gender = document.empform.gender.value
+                        return;
+                    }
+                }
+                )
+                $('#upb').css("display", "none");
+
+                genTable(employees);
+            }
+        }
+        function genTable(employees1) {
+            //display list of objects in a table using jsx and sort them on name basis
+            var tabledata = employees1.map((emp, i) => {
+                return (
+                    <tr>
+                        <td>{emp.firstname}</td>
+                        <td>{emp.lastname}</td>
+                        <td>{emp.age}</td>
+                        <td>{emp.gender}</td>
+
+                        <td>
+                            <button onClick={() => { deleteEmp(emp.id) }}>DELETE</button>
+                        </td>
+                        <td>
+                            <button onClick={() => { updateEmp(emp.id) }}>UPDATE</button>
+                        </td>
+                    </tr>
+                )
+            })
+            ReactDOM.render(tabledata, document.getElementById('disptable'))
+        }
+    </script>
+</body>
+
+</html

@@ -1,0 +1,272 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+        class TodoList extends React.Component {
+            constructor() {
+                super();
+                this.state = {
+                    tasks: [],
+                    input: '',
+                    editch: false,
+                    editid: null,
+                    filter: "all",
+                    ctasks: [],
+                    ictasks: []
+                };
+
+            }
+
+            addtodo = () => {
+                let tasks = this.state.tasks;
+                let ict = this.state.ictasks;
+                tasks.push({ id: tasks.length + 1, task: this.state.input, completed: false });
+                ict.push({ id: tasks.length, task: this.state.input, completed: false });
+                this.setState({
+                    tasks: tasks,
+                    ictasks: ict,
+                    input: ''
+                });
+            }
+            handleChangeInput = (e) => {
+                this.setState({
+                    input: e
+                })
+            }
+            edittodo = (id) => {
+                let tasks = this.state.tasks;
+                tasks.forEach((item, index) => {
+                    if (item.id == id) {
+                        this.setState({
+                            editch: true,
+                            editid: id,
+                            input: item.task
+                        })
+                        return
+                    }
+                })
+            }
+
+            updatetodo = () => {
+                let tasks = this.state.tasks;
+                tasks.forEach((item, index) => {
+                    if (item.id == this.state.editid) {
+                        item.task = this.state.input;
+                        this.setState({
+                            tasks: tasks,
+                            editch: false,
+                            input: '',
+                            editid: null
+                        })
+                        return
+                    }
+                })
+            }
+            strikeTask = (id) => {
+                let tasks = this.state.tasks;
+                let ctasks = this.state.ctasks;
+                let ictasks = this.state.ictasks;
+                // tasks[id].completed = !tasks[index].completed;
+                tasks.forEach((item, index) => {
+                    if (item.id == id) {
+                        item.completed = !item.completed;
+                        if (item.completed) {
+                            console.log(item, "item ct")
+                            ctasks.push(item);
+                            ictasks.splice(ictasks.findIndex(function (i) {
+                                return i.id === id;
+                            }), 1);
+                        }
+                        else {
+                            console.log(item, "item ict")
+                            ictasks.push(item);
+                            ctasks.splice(ctasks.findIndex(function (i) {
+                                return i.id === id;
+                            }), 1);
+                        }
+                        this.setState({
+                            ...this.state, tasks: tasks, ctasks: ctasks, ictasks: ictasks
+                        });
+                        return
+                    }
+                })
+                console.log("at strike tasks", this.state.tasks);
+                console.log("at strike ict", this.state.ictasks)
+                console.log("at strike ct", this.state.ctasks)
+            }
+            deletetodo = (id) => {
+                let tasks = this.state.tasks;
+                let ictasks = this.state.ictasks;
+                let ctasks = this.state.ctasks;
+                
+                console.log(this.state.tasks, "tasks at bdel")
+                console.log(this.state.ictasks, "ictasks at bdel")
+                console.log(this.state.ctasks, "ctasks at bdel")
+                tasks.splice(tasks.findIndex(function (i) {
+                    return i.id === id;
+                }), 1);
+                ictasks.splice(ictasks.findIndex(function (i) {
+                    return i.id === id;
+                }), 1);
+                ctasks.splice(ctasks.findIndex(function (i) {
+                    return i.id === id;
+                }), 1);
+                this.setState({
+                    ...this.state, tasks: tasks, ictasks: ictasks, ctasks: ctasks
+                });
+                console.log(this.state.tasks, "tasks at del")
+                console.log(this.state.ictasks, "ictasks at del")
+                console.log(this.state.ctasks, "ctasks at del")
+            }
+            filter = (e) => {
+                this.setState({
+                    ...this.state, filter: e
+                });
+
+            }
+            render() {
+                if (this.state.filter == "all") {
+                    console.log(this.state.filter)
+                    console.log(this.state.tasks)
+                    return (
+                        <div>
+                            <h1>Todo List {this.props.todoName}</h1>
+                            <form>
+                                <input type="text" className="inputField" placeholder="Add a new todo" value={this.state.input} onChange={(e) => { this.handleChangeInput(e.target.value) }} />
+                                {!this.state.editch && <button type="button" onClick={this.addtodo}>Add Todo</button>}
+                                {this.state.editch && <button type="button" onClick={this.updatetodo}>Update</button>}
+                            </form>
+                            <div>
+                                <input type="radio" name="filter" value="all" onClick={() => { this.filter("all") }} /> All
+                                <input type="radio" name="filter" value="completed" onClick={() => { this.filter(true) }} /> Completed
+                                <input type="radio" name="filter" value="uncompleted" onClick={() => { this.filter(false) }} /> Uncompleted
+                                <ul id="todolist">
+                                    {
+                                        this.state.tasks.map((item, index) => {
+                                            return <li key={item.id} onDoubleClick={() => {
+                                                this.strikeTask(item.id)
+                                            }}>
+                                                {!item.completed && <span>{item.task}</span>}
+                                                {item.completed && <strike>{item.task}</strike>}
+                                                <button onClick={() => { this.edittodo(item.id) }}>Edit</button>
+                                                <button onClick={() => { this.deletetodo(item.id) }}>X</button>
+                                            </li>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+                else if (this.state.filter == true) {
+                    console.log(this.state.filter)
+                    console.log(this.state.ctasks)
+                    return (
+                        <div>
+                            <h1>Todo List {this.props.todoName}</h1>
+                            <form>
+                                <input type="text" className="inputField" placeholder="Add a new todo" value={this.state.input} onChange={(e) => { this.handleChangeInput(e.target.value) }} />
+                                {!this.state.editch && <button type="button" onClick={this.addtodo}>Add Todo</button>}
+                                {this.state.editch && <button type="button" onClick={this.updatetodo}>Update</button>}
+                            </form>
+                            <div>
+                                <input type="radio" name="filter" value="all" onClick={() => { this.filter("all") }} /> All
+                                <input type="radio" name="filter" value="completed" onClick={() => { this.filter(true) }} /> Completed
+                                <input type="radio" name="filter" value="uncompleted" onClick={() => { this.filter(false) }} /> Uncompleted
+                                <ul id="todolist">
+                                    {
+                                        this.state.ctasks.map((item, index) => {
+                                            return <li key={index} onDoubleClick={() => {
+                                                this.strikeTask(item.id)
+                                            }}>
+                                                {!item.completed && <span>{item.task}</span>}
+                                                {item.completed && <strike>{item.task}</strike>}
+                                                <button onClick={() => { this.edittodo(item.id) }}>Edit</button>
+                                                <button onClick={() => { this.deletetodo(item.id) }}>X</button>
+                                            </li>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+                else {
+                    console.log(this.state.filter)
+                    console.log(this.state.ictasks)
+
+                    return (
+                        <div>
+                            <h1>Todo List {this.props.todoName}</h1>
+                            <form>
+                                <input type="text" className="inputField" placeholder="Add a new todo" value={this.state.input} onChange={(e) => { this.handleChangeInput(e.target.value) }} />
+                                {!this.state.editch && <button type="button" onClick={this.addtodo}>Add Todo</button>}
+                                {this.state.editch && <button type="button" onClick={this.updatetodo}>Update</button>}
+                            </form>
+                            <div>
+                                <input type="radio" name="filter" value="all" onClick={() => { this.filter("all") }} /> All
+                                <input type="radio" name="filter" value="completed" onClick={() => { this.filter(true) }} /> Completed
+                                <input type="radio" name="filter" value="uncompleted" onClick={() => { this.filter(false) }} /> Uncompleted
+                                <ul id="todolist">
+                                    {
+                                        this.state.ictasks.map((item, index) => {
+                                            return <li key={index} onDoubleClick={() => {
+                                                this.strikeTask(item.id)
+                                            }}>
+                                                {!item.completed && <span>{item.task}</span>}
+                                                {item.completed && <strike>{item.task}</strike>}
+                                                <button onClick={() => { this.edittodo(item.id) }}>Edit</button>
+                                                <button onClick={() => { this.deletetodo(item.id) }}>X</button>
+                                            </li>
+                                        })
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    )
+                }
+            }
+        }
+        var App = () => {
+            const { useState } = React
+            const [todos, setTodos] = useState([])
+            const addTodo = () => {
+                var todo = prompt("Enter a new todo", "")
+                console.log(todo)
+                if (todo) {
+                    setTodos([...todos, todo])
+                }
+            }
+            return (
+                <div>
+                    <button type="button" onClick={addTodo}>Add Todo</button>
+                    <TodoList todoName="home" />
+                    <TodoList todoName="college" />
+                    <TodoList todoName="work" />
+                    {
+                        todos.map((item, index) => {
+                            return <TodoList key={index} todoName={item} />
+                        })
+                    }
+                </div>
+            )
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+
+</html
