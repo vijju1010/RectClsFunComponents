@@ -1,0 +1,23 @@
+{
+    "posts": [
+        {
+            "title": "Post 1",
+            "content": "content 1",
+            "author": "author 1",
+            "likes": 0,
+            "dislikes": 0,
+            "comments": [
+                {
+                    "postid": 1,
+                    "content": "content 1",
+                    "reyply": [
+                        {
+                            "content": "content 1",
+                            "replys": ["reply1", "reply2"]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

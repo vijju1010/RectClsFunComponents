@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import TodoList from './components/TodoList';
+import FunPosts from './components/FunPosts';
+import Posts from './components/Posts';
 import Rating from './components/Rating';
+import Slider from './components/Slider';
+import TodoList from './components/TodoList';
+// import Rating from './components/Rating';
 
 export default class App extends Component {
     constructor(props) {
@@ -90,8 +94,12 @@ export default class App extends Component {
     render() {
         return (
             <div>
+                <FunPosts />
+                {/* <Rating stars={8} /> */}
+                {/* <Posts /> */}
                 {/* <Rating stars={5} />
                 <Rating stars={10} /> */}
+                {/* <Slider/>
 
                 <br />
                 <br />
@@ -110,7 +118,7 @@ export default class App extends Component {
                             delTask={this.delTask}
                         />
                     );
-                })}
+                })} */}
             </div>
         );
     }

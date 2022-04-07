@@ -16,7 +16,6 @@ export default class Rating extends Component {
         return (
             <div>
                 <h1>Rating {this.state.rating}</h1>
-
                 {[...Array(this.props.stars)].map((star, i) => {
                     i = i + 1;
                     return (
