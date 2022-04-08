@@ -3,6 +3,7 @@ import { Flex, Box, Heading, Spacer, Button } from '@chakra-ui/react';
 import Comments from './Comments';
 
 const FunPost = (props) => {
+    var [cmtch, setCmtch] = React.useState(false);
     return (
         <div>
             <Flex>
@@ -38,19 +39,27 @@ const FunPost = (props) => {
                     }}>
                     Like : {props.post.likes}
                 </button>
-                <button
-                    onClick={() => {
-                        props.toggleshowComments();
-                    }}>
-                    Comments
-                </button>
+                <div>
+                    <button
+                        className='btn btn-default'
+                        style={({ height: '40px' }, { width: '200px' })}
+                        onClick={() => {
+                            setCmtch(!cmtch);
+                        }}>
+                        Comments
+                    </button>
 
-                <Comments
-                    addComment={props.addComment}
-                    postid={props.post.id}
-                    style={{ display: props.showComments ? 'block' : 'none' }}
-                    comment={props.post.comment}
-                />
+                    {cmtch && (
+                        <Comments
+                            addComment={props.addComment}
+                            postid={props.post.id}
+                            style={{
+                                display: props.showComments ? 'block' : 'none',
+                            }}
+                            comment={props.post.comment}
+                        />
+                    )}
+                </div>
                 <button
                     className='btn btn-info'
                     style={{ height: '40px' }}

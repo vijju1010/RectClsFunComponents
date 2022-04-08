@@ -16,6 +16,9 @@ const FunPosts = () => {
     useEffect(() => {
         localStorage.setItem('funposts', JSON.stringify(posts));
     }, [posts]);
+    
+
+
 
     var handleChange = (e) => {
         setNewPost(e.target.value);
@@ -42,6 +45,7 @@ const FunPosts = () => {
             dislikes: 0,
             comment: {
                 id: id,
+                cmtch: false,
                 comments: [
                     {
                         content: 'content 1',

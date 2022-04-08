@@ -1,19 +1,25 @@
 {
-    "posts": [
+    "author": [
         {
-            "title": "Post 1",
-            "content": "content 1",
-            "author": "author 1",
-            "likes": 0,
-            "dislikes": 0,
-            "comments": [
+            "name": "author 1",
+            "email": "name",
+            "password": "password",
+            "posts": [
                 {
-                    "postid": 1,
+                    "title": "Post 1",
                     "content": "content 1",
-                    "reyply": [
+                    "likes": 0,
+                    "dislikes": 0,
+                    "comments": [
                         {
-                            "content": "content 1",
-                            "replys": ["reply1", "reply2"]
+                            "commentor": "author 1",
+                            "content": "comment 1",
+                            "reply": [
+                                {
+                                    "content": "content 1",
+                                    "replys": ["reply1", "reply2"]
+                                }
+                            ]
                         }
                     ]
                 }

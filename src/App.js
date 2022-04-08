@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FunPosts from './components/FunPosts';
 import Posts from './components/Posts';
+import Questions from './components/Questions';
 import Rating from './components/Rating';
 import Slider from './components/Slider';
 import TodoList from './components/TodoList';
@@ -26,11 +27,12 @@ export default class App extends Component {
         };
     }
     componentDidUpdate() {
-        console.log('componentDidUpdate', this.state);
+        // console.log('componentDidUpdate', this.state);
         localStorage.setItem('todos', JSON.stringify(this.state.todoslist));
     }
+
     componentDidMount() {
-        console.log('componentDidMount', this.state);
+        // console.log('componentDidMount', this.state);
         let todos = JSON.parse(localStorage.getItem('todos'));
         if (todos) {
             this.setState({
@@ -94,7 +96,8 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <FunPosts />
+                <Questions />
+                {/* <FunPosts /> */}
                 {/* <Rating stars={8} /> */}
                 {/* <Posts /> */}
                 {/* <Rating stars={5} />

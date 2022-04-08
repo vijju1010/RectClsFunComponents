@@ -12,6 +12,11 @@ const Comments = (props) => {
             <input
                 type='text'
                 placeholder='Comment'
+                style={
+                    ({ border: 'none' },
+                    { borderBottom: '1px solid #ccc' },
+                    { marginTop: '10px' })
+                }
                 value={newComment}
                 onChange={handleChange}
                 onKeyUp={(e) => {
@@ -22,7 +27,6 @@ const Comments = (props) => {
                             content: newComment,
                         };
                         props.addComment(newCmment, props.postid);
-                        // props.comment.comments.push(newCmment);
                         setNewComment('');
                     }
                 }}
