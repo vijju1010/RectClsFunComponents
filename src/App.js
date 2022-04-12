@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import Formi from './components/Form';
+import FormikYupUseField from './components/FormikYupUseField';
 import FunPosts from './components/FunPosts';
+import GoogleSignUp from './components/GoogleSignUp';
 import Posts from './components/Posts';
 import Questions from './components/Questions';
 import Rating from './components/Rating';
@@ -96,7 +99,10 @@ export default class App extends Component {
     render() {
         return (
             <div>
-                <Questions />
+                <GoogleSignUp />
+                {/* <FormikYupUseField /> */}
+                {/* <Formi /> */}
+                {/* <Questions /> */}
                 {/* <FunPosts /> */}
                 {/* <Rating stars={8} /> */}
                 {/* <Posts /> */}

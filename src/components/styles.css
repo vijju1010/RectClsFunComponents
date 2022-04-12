@@ -17,3 +17,23 @@
 .red-color {
     color: red;
 }
+.my-box{
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px rgb(34, 31, 31);
+    height:max-content;
+    width:max-content;
+    padding-bottom: 20px;
+    padding-top: 40px;
+    padding-left: 30px;
+    margin-left:31% ;
+    margin-right:20% ;
+    margin-top:11% ;
+    margin-bottom:20% ;
+}
+.googleSt{
+    font-family: 'Google Sans',
+    'Noto Sans Myanmar UI',
+    arial,
+    sans-serif;
+    font-size: 21px;
+}
