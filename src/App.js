@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import Formi from './components/Form';
-import FormikYupUseField from './components/FormikYupUseField';
-import FunPosts from './components/FunPosts';
+// import Formi from './components/Form';
+// import FormikYupUseField from './components/FormikYupUseField';
+// import FunPosts from './components/FunPosts';
 import GoogleSignUp from './components/GoogleSignUp';
-import Posts from './components/Posts';
-import Questions from './components/Questions';
-import Rating from './components/Rating';
-import Slider from './components/Slider';
-import TodoList from './components/TodoList';
+// import Posts from './components/Posts';
+// import Questions from './components/Questions';
+// import Rating from './components/Rating';
+// import Slider from './components/Slider';
+// import TodoList from './components/TodoList';
 // import Rating from './components/Rating';
 
 export default class App extends Component {

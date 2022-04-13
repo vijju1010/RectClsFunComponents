@@ -3,6 +3,7 @@ import { Formik, Form, useField } from 'formik';
 import * as Yup from 'yup';
 import './styles.css';
 import { GoogleIcon } from './GoogleIcon';
+
 const MyTextInput = React.forwardRef(({ label, ...props }, iref) => {
     const [field, meta] = useField(props);
     return (
@@ -34,7 +35,7 @@ const MyCheckbox = ({ children, ...props }) => {
 
 const GoogleSignUp = () => {
     var getUsers = async () => {
-        const response = await fetch('https://fakequizdb.herokuapp.com/users');
+        const response = await fetch('http://localhost:8000/getusers');
         const data = await response.json();
         var users = [];
         data.forEach((item, index) => {
@@ -64,6 +65,19 @@ const GoogleSignUp = () => {
                             confirmPassword: '',
                             showPassword: false,
                         }}
+                        onSubmit={(values, { setSubmitting }) => {
+                            fetch('http://localhost:8000/reguser', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(values),
+                            }).then((res) => {
+                                console.log(res);
+                            });
+                            setTimeout(() => {
+                                alert(JSON.stringify(values, null, 2));
+                                setSubmitting(false);
+                            }, 400);
+                        }}
                         validationSchema={Yup.object({
                             firstName: Yup.string()
                                 .required('Required')
@@ -83,18 +97,45 @@ const GoogleSignUp = () => {
                                 .test(
                                     'unique-email',
                                     'Email already exists',
-                                    async (value) => {
-                                        return getUsers().then((users) => {
-                                            return !users.includes(value);
+                                    function (value) {
+                                        console.log('reached');
+                                        var { createError } = this;
+                                        var p = new Promise(function (
+                                            resolve,
+                                            reject
+                                        ) {
+                                            fetch(
+                                                'http://localhost:8000/getEmails'
+                                            )
+                                                .then((res) => {
+                                                    return res.json();
+                                                })
+                                                .then((data) => {
+                                                    console.log(data, 'data');
+                                                    if (!data.includes(value)) {
+                                                        console.log(
+                                                            "doesn't exist"
+                                                        );
+                                                        resolve(true);
+                                                    } else {
+                                                        // resolve(false);
+                                                        reject(
+                                                            createError({
+                                                                message:
+                                                                    'Email already taken',
+                                                            })
+                                                        );
+                                                    }
+                                                });
                                         });
+                                        return p;
+                                        // return getUsers().then((users) => {
+                                        //     return !users.includes(value);
+                                        // });
                                     }
                                 )
                                 .notOneOf(
-                                    [
-                                        Yup.ref('password'),
-                                        'password',
-                                        getUsers(),
-                                    ],
+                                    [Yup.ref('password'), 'password'],
                                     'Password cannot be the same as email'
                                 )
                                 .notOneOf(
@@ -117,7 +158,9 @@ const GoogleSignUp = () => {
                                 ),
                         })}>
                         {({ isSubmitting, values }) => (
-                            <Form>
+                            <Form
+                                action='http://localhost:8000/reguser'
+                                method='post'>
                                 <div className='d-flex flex-row bd-highlight mb-3'>
                                     <MyTextInput
                                         name='firstName'

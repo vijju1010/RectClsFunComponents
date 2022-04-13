@@ -1,8 +1,8 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './App.js';
+// import reportWebVitals from './reportWebVitals';
 
 // import { createRoot } from 'react-dom/client';
 // const container = document.getElementById('app');
@@ -19,4 +19,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-reportWebVitals();
+// reportWebVitals();
